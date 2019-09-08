@@ -1,0 +1,11 @@
+# don't track content of these folders
+nandiasgarden/__pycache__/
+nandiasgarden/__init__.py
+env/
+
+# compiled source #
+###################
+*.pyc
+
+# sqlite3 file (We'd be using postgreSQL)
+*.sqlite3
