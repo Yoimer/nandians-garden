@@ -1,6 +1,8 @@
 # don't track content of these folders
 nandiasgarden/__pycache__/
 nandiasgarden/__init__.py
+pizza/__init__.py
+pizza/migrations/__init__.py
 env/
 
 # compiled source #

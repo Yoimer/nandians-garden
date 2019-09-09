@@ -179,6 +179,10 @@ django-admin startproject nandiasgarden .
 python manage.py runserver
 ```
 
+**Check server on browser**
+
+http://127.0.0.1:8000/
+
 **Open Git Bash on django-forms-course folder and initialize a git repository**
 ```
 git init
@@ -245,4 +249,91 @@ git commit -m "initial django configurations based on the local enviroment"
 Git Push the commit
 ```
 git push -u heroku local
+```
+
+Create a new app. One of our main products is "pizza", so let's create it
+
+```
+django-admin startapp pizza
+```
+
+Add pizza/__init__.py and pizza/migrations/__init__.py to .gitignore
+
+``` shell
+# don't track content of these folders
+nandiasgarden/__pycache__/
+nandiasgarden/__init__.py
+pizza/__init__.py
+pizza/migrations/__init__.py
+env/
+
+# compiled source #
+###################
+*.pyc
+
+# sqlite3 file (We'd be using postgreSQL)
+*.sqlite3
+```
+
+Add home and ordering page to the project. In order to do so, let's add the new pages on the **nandiasgarden\url.py**:
+
+``` python
+from django.contrib import admin
+from django.urls import path
+from pizza import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home, name='home'), #default page
+    path('order', views.order, name='order'),
+]
+```
+
+Since we have just installed our pizza app, we have to add it to the **nandiasgarden/settings.py** INSTALLED_APPS list:
+
+``` python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'pizza',
+]
+```
+
+Let's make some views that return back this two sites (home and order) on **pizza/views.py**
+
+``` python
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'pizza/home.html')
+
+def order(request):
+    return render(request, 'pizza/order.html')
+```
+
+Let's add the templatess for both of these views:
+
+Inside of the **pizza** folder let's create **templates** folder and inside of it let's create one called **pizza** and in that folder the **home.html**
+
+```
+pizza/templates/pizza/home.html
+```
+
+```
+pizza/templates/pizza/order.html
+```
+
+Content of home.html
+``` html
+<h1>Nadian's Garden</h1>
+<a href="{% url 'order' %}">Order a pizza</a>
+```
+
+Content of order.html
+``` html
+<h1>Order a Pizza</h1>
 ```
