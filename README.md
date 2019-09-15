@@ -333,10 +333,16 @@ Content of home.html
 <a href="{% url 'order' %}">Order a pizza</a>
 ```
 
-Content of order.html
+Content of order.html (including csrf_token)
 ``` html
 <h1>Order a Pizza</h1>
-<form>
+
+<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
+    is going to go to the url where you currently are. even if it's what you want, 
+    it's always a best practice to make sure that you specify where the url is
+-->
+<form action="{% url 'order' %}" method="post">
+    {% csrf_token %}
     <label for="topping1">Topping 1: </label>
     <input id="topping1" type="text" name="topping1">
     <label for="topping2">Topping 2:</label>
@@ -347,5 +353,32 @@ Content of order.html
         <option value="Medium">Medium</option>
         <option value="Large">Large</option>
     </select>
+    <input type="submit" value="Order Pizza">
+</form>
+```
+
+Adds **forms.py** on **root folder** (this removes html schelet on order.html)
+
+``` python
+from django import forms
+
+class PizzaForm(forms.Form):
+    topping1 = forms.CharField(label='Topping 1', max_length=100)
+    topping2 = forms.CharField(label='Topping 2', max_length=100)
+    size = forms.ChoiceField(label='Size',choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
+```
+Content of order.html (calling forms.py)
+
+``` html
+<h1>Order a Pizza</h1>
+
+<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
+    is going to go to the url where you currently are. even if it's what you want, 
+    it's always a best practice to make sure that you specify where the url is
+-->
+<form action="{% url 'order' %}" method="post">
+    {% csrf_token %}
+    {{ pizzaform }}
+    <input type="submit" value="Order Pizza">
 </form>
 ```
