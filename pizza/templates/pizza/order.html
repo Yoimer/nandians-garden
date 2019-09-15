@@ -1,6 +1,11 @@
 <h1>Order a Pizza</h1>
 
-<form>
+<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
+    is going to go to the url where you currently are. even if it's what you want, 
+    it's always a best practice to make sure that you specify where the url is
+-->
+<form action="{% url 'order' %}" method="post">
+    {% csrf_token %}
     <label for="topping1">Topping 1: </label>
     <input id="topping1" type="text" name="topping1">
     <label for="topping2">Topping 2:</label>
@@ -11,4 +16,5 @@
         <option value="Medium">Medium</option>
         <option value="Large">Large</option>
     </select>
+    <input type="submit" value="Order Pizza">
 </form>
