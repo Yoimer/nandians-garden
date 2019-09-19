@@ -382,3 +382,47 @@ Content of order.html (calling forms.py)
     <input type="submit" value="Order Pizza">
 </form>
 ```
+
+Using submitted data
+
+Updating **order** function on **pizza/views.py**
+
+``` python
+from django.shortcuts import render
+from .forms import PizzaForm
+
+def home(request):
+    return render(request, 'pizza/home.html')
+
+def order(request):
+    if request.method == 'POST':
+        filled_form = PizzaForm(request.POST)
+        if filled_form.is_valid():
+            #filled_form data values belong to labels on forms.py
+            note = 'Thanks for ordering! Your %s %s and %s pizza is on its way' %(filled_form.cleaned_data['size'],
+            filled_form.cleaned_data['topping1'],
+            filled_form.cleaned_data['topping2'],)
+            new_form = PizzaForm()
+            return render(request, 'pizza/order.html', {'pizzaform':new_form, 'note':note})
+    else:
+        form = PizzaForm()
+        return render(request, 'pizza/order.html', {'pizzaform':form})
+```
+
+Renders note on **templates/pizza/order.html** from **pizza/views.py**
+
+``` html
+<h1>Order a Pizza</h1>
+
+<h2>{{ note }}</h2>
+
+<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
+    is going to go to the url where you currently are. even if it's what you want, 
+    it's always a best practice to make sure that you specify where the url is
+-->
+<form action="{% url 'order' %}" method="post">
+    {% csrf_token %}
+    {{ pizzaform }}
+    <input type="submit" value="Order Pizza">
+</form>
+```
