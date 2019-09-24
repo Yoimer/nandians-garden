@@ -535,3 +535,31 @@ python manage.py runserver
 ```
 http://127.0.0.0:8000/admin
 ```
+
+In order to see the  pure **SQL queries** made on the migration, let's execute this command
+
+```
+python manage.py sqlmigrate app migration
+```
+
+In our case the app is **pizza** and the migration is **0001**
+
+```
+python manage.py sqlmigrate pizza 0001
+```
+The output should look like this
+
+```
+BEGIN;
+--
+-- Create model Size
+--
+CREATE TABLE "pizza_size" ("id" serial NOT NULL PRIMARY KEY, "title" varchar(100) NOT NULL);
+--
+-- Create model Pizza
+--
+CREATE TABLE "pizza_pizza" ("id" serial NOT NULL PRIMARY KEY, "topping1" varchar(100) NOT NULL, "topping2" varchar(100) NOT NULL, "size_id" integer NOT NULL);
+ALTER TABLE "pizza_pizza" ADD CONSTRAINT "pizza_pizza_size_id_44f838e1_fk_pizza_size_id" FOREIGN KEY ("size_id") REFERENCES "pizza_size" ("id") DEFERRABLE INITIALLY DEFERRED;
+CREATE INDEX "pizza_pizza_size_id_44f838e1" ON "pizza_pizza" ("size_id");
+COMMIT;
+```
