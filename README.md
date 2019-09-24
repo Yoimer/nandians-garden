@@ -426,3 +426,112 @@ Renders note on **templates/pizza/order.html** from **pizza/views.py**
     <input type="submit" value="Order Pizza">
 </form>
 ```
+
+Adds **Pizza** and **Size** classes in **pizza/models.py**
+
+``` python
+from django.db import models
+
+# Create your models here.
+
+class Size(models.Model):
+    title = models.CharField(max_length=100)
+
+# this will help us show the size in forms and in the adming panel.
+# __str__: works for any class NOT only classes in django
+# and what it does is define what the object should look like
+# when it's printed out to a screen. It applies when it's printed
+# to a terminal or to a HTML.
+def __str__(self):
+    return self.title
+
+class Pizza(models.Model):
+    topping1 = models.CharField(max_length=100)
+    topping2 = models.CharField(max_length=100)
+    # this line creates a connection with to our size class
+    # if one thing is deleted, we're also going to delete the corresponding object that has the relationship
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)
+```
+
+Adds **Pizza** and **Size** in **pizza/admin.py** in order to be in the **Admin** in django
+
+``` python
+from django.contrib import admin
+
+# register your models here.
+
+from .models import Pizza, Size
+
+admin.site.register(Pizza)
+admin.site.register(Size)
+```
+Installs **psycopg2==2.7.4** and  **python-decouple==3.1** for postgresql configuration from the previous activated **virtualenv**
+
+```
+pip3 install psycopg2==2.7.4 python-decouple==3.1
+```
+
+Creates **requirements.txt** adding all the python3 dependecies for the project so far using **pip3 freeze**
+
+```
+pip3 free > requirements.txt
+```
+These are all python3 dependencies so far
+```
+Django==2.2.5
+psycopg2==2.7.4
+python-decouple==3.1
+pytz==2019.2
+sqlparse==0.3.0
+```
+Removes **sqlite3** configuration and adds **postgresql**
+
+``` python
+# Database
+# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'nandiansgardendb',
+        'USER': 'nandiansgarden',
+        'PASSWORD': '12345',
+        'HOST': 'localhost',
+        'PORT': '5432',
+     }
+}
+```
+
+Creates **migrations** and execute **migrate** from **prompt** (virtualenv in **root** directory) 
+in order to start configuring **Pizza** and **Sizes** from Admin
+
+```
+python manage.py makemigrations
+```
+```
+python manage.py migrate
+```
+
+Creates **superuser** in order to manipulate data from Admin. It asks for user, email and password
+
+```
+python manage.py createsuperuser
+```
+
+Start server again (if not running already) and go on the browser to the admin section. Check if **Pizza** and **Size**
+objects were created successfully.
+
+```
+python manage.py runserver
+```
+
+```
+http://127.0.0.0:8000/admin
+```
