@@ -587,7 +587,7 @@ class PizzaForm(forms.ModelForm):
 ```
 **Widgets**
 
-This is what a widget would look like on **pizza/forms.py** file
+This is what a widget would look like using forms on **pizza/forms.py** file
 
 ``` python
 from django import forms
@@ -599,4 +599,30 @@ class PizzaForm(forms.Form):
     topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.Textarea) # for textarea
     topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.PasswordInput) # for password
     toppings = forms.MultipleChoiceField(choices=[('pep', 'Pepperoni'), ('cheese', 'Cheese'), ('olives', 'Olives')], widget=forms.CheckboxSelectMultiple) # for checkboxes
+```
+
+**Advanced Widgets**
+
+This is what a widget would look like using models on **pizza/forms.py** file
+
+``` python
+from django import forms
+from .models import Pizza, Size
+
+# class PizzaForm(forms.Form):
+
+    # topping1 = forms.CharField(label='Topping 1', max_length=100)
+    # topping2 = forms.CharField(label='Topping 2', max_length=100)
+    # size = forms.ChoiceField(label='Size',choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
+
+class PizzaForm(forms.ModelForm):
+
+    size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.RadioSelect)
+
+    class Meta:
+        model = Pizza
+        fields = ['topping1', 'topping2', 'size']
+        labels = {'topping1': 'Topping 1', 'topping2': 'Topping 2'}
+        # widgets = {'topping1': forms.Textarea}
+        # widgets = {'size':forms.CheckboxSelectMultiple}
 ```
