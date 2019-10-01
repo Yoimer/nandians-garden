@@ -4,6 +4,7 @@ nandiasgarden/__init__.py
 pizza/__init__.py
 pizza/migrations/__init__.py
 env/
+.vscode/
 
 # compiled source #
 ###################
