@@ -585,3 +585,18 @@ class PizzaForm(forms.ModelForm):
         fields = ['topping1', 'topping2', 'size']
         labels = {'topping1': 'Topping 1', 'topping2': 'Topping 2'}
 ```
+**Widgets**
+
+This is what a widget would look like on **pizza/forms.py** file
+
+``` python
+from django import forms
+from .models import Pizza
+
+class PizzaForm(forms.Form):
+
+    ######widget implementations
+    topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.Textarea) # for textarea
+    topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.PasswordInput) # for password
+    toppings = forms.MultipleChoiceField(choices=[('pep', 'Pepperoni'), ('cheese', 'Cheese'), ('olives', 'Olives')], widget=forms.CheckboxSelectMultiple) # for checkboxes
+```
