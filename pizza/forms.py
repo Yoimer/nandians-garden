@@ -17,3 +17,6 @@ class PizzaForm(forms.ModelForm):
         labels = {'topping1': 'Topping 1', 'topping2': 'Topping 2'}
         # widgets = {'topping1': forms.Textarea}
         # widgets = {'size':forms.CheckboxSelectMultiple}
+
+    class MultiplePizzaForm(forms.Form):
+        number = forms.IntegerField(min_value=2, max_length=6)

@@ -626,3 +626,97 @@ class PizzaForm(forms.ModelForm):
         # widgets = {'topping1': forms.Textarea}
         # widgets = {'size':forms.CheckboxSelectMultiple}
 ```
+
+**Formsets - Multiple forms on a page**
+
+Added pizzas path view in **nandiasgarden/urls.py**
+
+``` python
+
+from django.contrib import admin
+from django.urls import path
+from pizza import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home, name='home'), #default page
+    path('order', views.order, name='order'),
+    path('pizzas', views.pizzas, name='pizzas'),
+```
+Creating  **MultiplePizzaForm** class in **pizza/form.py**
+
+``` python
+from django import forms
+from .models import Pizza, Size
+
+# class PizzaForm(forms.Form):
+
+    # topping1 = forms.CharField(label='Topping 1', max_length=100)
+    # topping2 = forms.CharField(label='Topping 2', max_length=100)
+    # size = forms.ChoiceField(label='Size',choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
+
+class PizzaForm(forms.ModelForm):
+
+    size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.RadioSelect)
+
+    class Meta:
+        model = Pizza
+        fields = ['topping1', 'topping2', 'size']
+        labels = {'topping1': 'Topping 1', 'topping2': 'Topping 2'}
+        # widgets = {'topping1': forms.Textarea}
+        # widgets = {'size':forms.CheckboxSelectMultiple}
+
+    class MultiplePizzaForm(forms.Form):
+        number = forms.IntegerField(min_value=2, max_length=6)
+```
+Adding "Want more Pizza?" form in **pizza/templates/pizza/order.html**
+
+``` html
+<h1>Order a Pizza</h1>
+
+<h2>{{ note }}</h2>
+
+<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
+    is going to go to the url where you currently are. even if it's what you want, 
+    it's always a best practice to make sure that you specify where the url is
+-->
+<form action="{% url 'order' %}" method="post">
+    {% csrf_token %}
+    {{ pizzaform }}
+    <input type="submit" value="Order Pizza">
+</form>
+
+<br><br>
+
+Want more than one pizza?
+
+<form action="{% url 'pizzas' %}" method="get">
+    {{multiple_form}}
+    <input type="submit" name="Get Pizzas">
+</form>
+```
+
+Adding MultiplePizzaForm on **pizza/view.py**
+
+``` python
+from django.shortcuts import render
+from .forms import PizzaForm, MultiplePizzaForm
+
+def home(request):
+    return render(request, 'pizza/home.html')
+
+def order(request):
+    multiple_form = MultiplePizzaForm()
+    if request.method == 'POST':
+        filled_form = PizzaForm(request.POST)
+        if filled_form.is_valid():
+            #filled_form data values belong to labels on forms.py
+            note = 'Thanks for ordering! Your %s %s and %s pizza is on its way' %(filled_form.cleaned_data['size'],
+            filled_form.cleaned_data['topping1'],
+            filled_form.cleaned_data['topping2'],)
+            new_form = PizzaForm()
+            return render(request, 'pizza/order.html', {'pizzaform':new_form, 'note':note, 'multiple_form': multiple_form})
+    else:
+        form = PizzaForm()
+        return render(request, 'pizza/order.html', {'pizzaform':form, 'multiple_form':multiple_form})
+```
