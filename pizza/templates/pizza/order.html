@@ -1,35 +1,55 @@
-<h1>Order a Pizza</h1>
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<h2>{{ note }}</h2>
-{% if created_pizza_pk %}
-<a href="{% url 'edit_order' created_pizza_pk %}">Edit Your Order </a>
-{% endif %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<!-- the action of a form is where you want to send the form. by defaolt if you don't provide anything in the action
-    is going to go to the url where you currently are. even if it's what you want, 
-    it's always a best practice to make sure that you specify where the url is
--->
+        <title>Nandia's Garden</title>
+    </head>
 
-<form action="{% url 'order' %}" method="post" novalidate>
-    {% csrf_token %}
-    {{ pizzaform.topping1.label_tag }}
-    {{ pizzaform.topping1 }} 
-    {{ pizzaform.topping1.errors }}
-    {{ pizzaform.topping2.label_tag }}
-    {{ pizzaform.topping2 }} 
-    {{ pizzaform.topping2.errors }}
-    <br><br><br><br><br>
-    <label for="{{ pizzaform.size.id_for_label }}">Size for your pizza</label>
-    {{ pizzaform.size }} 
-    {{ pizzaform.size.errors }}
-    <input type="submit" value="Order Pizza">
-</form>
+    <body>
+        {% load widget_tweaks %}
 
-<br><br>
+        <div class="container">
+            <h1>Order a Pizza</h1>
 
-Want more than one pizza?
+            <h2>{{ note }}</h2>
+            {% if created_pizza_pk %}
+            <a href="{% url 'edit_order' created_pizza_pk %}">Edit Your Order </a>
+            {% endif %}
 
-<form action="{% url 'pizzas' %}" method="get">
-    {{moltiple_form}}
-    <input type="submit" value="Get Pizzas">
-</form>
+            <!-- the action of a form is where you want to send the form. by defaolt if you don't provide anything in the action
+                is going to go to the url where you currently are. even if it's what you want, 
+                it's always a best practice to make sure that you specify where the url is
+            -->
+            <form action="{% url 'order' %}" method="post">
+                {% csrf_token %}
+                {% for field in pizzaform %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{field.label_tag }}
+                    {% render_field field class="form-control" %}
+                </div>
+                {% endfor %}
+                <input type="submit" value="Order Pizza">
+            </form>
+
+            Want more than one pizza?
+
+            <form action="{% url 'pizzas' %}" method="get">
+                {{ multiple_form }}
+                <input type="submit" value="Get Pizzas">
+            </form>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
