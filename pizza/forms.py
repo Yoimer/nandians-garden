@@ -11,8 +11,8 @@ class PizzaForm(forms.ModelForm):
     # size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.RadioSelect)
 
     # to be removed, just to show local validation and error
-    email = forms.EmailField()
-    url = forms.URLField()
+    # email = forms.EmailField()
+    # url = forms.URLField()
 
     class Meta:
         model = Pizza
