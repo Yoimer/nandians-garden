@@ -4,7 +4,7 @@ This project is about to explain how to deploy the django forms project from lyn
 
 ## Getting Started
 
-Get PostgreSQL 11.05 , Python 3.6.8 on the global path , pip 9.0.3 and the latest virtualenv library on any Windows Machine 64 bits
+Get PostgreSQL 11.05 , Python 3.6.8 on the global path , pip3 9.0.3 and the latest virtualenv library on any Windows Machine 64 bits
 
 PostgreSQL 11.05 (GUI)
 
@@ -135,19 +135,33 @@ Add Python 3.6 to PATH
 python --version
 ```
 
-**Install pip version 9.0.3 for this project**
+**Install pip3 version 9.0.3 for this project**
 
 ```
-pip install pip==9.0.3
+pip3 install pip3==9.0.3
 ```
 
 **Install the latest virtualenv**
 
 ```
-pip install virtualenv
+pip3 install virtualenv
 ```
 
-**Create a folder called django-forms-course folder and open cmd (or PowerShell) and create an virtual enviroment**
+# Test Local Branch
+
+**Clone the local branch from the repository. Local branch is connected to nandiansgardendb**
+
+```
+git clone https://github.com/Yoimer/nandians-garden.git --branch local --single-branch
+```
+
+**Move to nandians-garden folder**
+
+```
+cd nandians-garden
+```
+
+**Create virtual enviroment folder**
 
 ```
 python -m venv env
@@ -163,358 +177,20 @@ activate.bat (if using cmd)
 Activate.ps1 (if using PowerShell)
 ```
 
-**Install all the python packages required using pip**
+Move back to nandians-garden folder
+
+**Install all the dependencies from requirements.txt using pip3**
 
 ```
-pip install django
+pip3 install -r requirements.txt
 ```
 
-**Create nandiansgarden project (including the dot at the end of the command)**
-``` python
-django-admin startproject nandiasgarden .
-```
-
-**Test django server is running**
-``` python
-python manage.py runserver
-```
-
-**Check server on browser**
-
-http://127.0.0.1:8000/
-
-**Open Git Bash on django-forms-course folder and initialize a git repository**
-```
-git init
-```
-
-**Create a local branch**
-
-We will create two branches for this project, **local** and  **master** branch.
-
-Heroku will build this project only in the **master** branch (this is imperative for heroku), however we need to test all the code in the **local** enviroment first.
-
-Heroku deployment requires a lot of adaptation in the **settings.py** file, files and folder addition such has **requirements.txt**, **Procfile** and **static/** folder also.
-
-So, as soon as we're ready to make the deployment, we will create a master **branch** off of the **local** branch and we'll
-start making the Heroku's configuration-adaptation.
-
-Command to create the **local** branch
-
-```
-git checkout -b local
-```
-
-Now Git bash should show that we're in the **local** branch
-
-**Let's create the .gitignore file**
-
-This is for avoiding unnecessary changes prompting on the git bash console. Windows tends to include a lot of files that we won't care about in the project
-
-```
-touch .gitignore
-```
-.gitignore configuration (your's may vary depending on the OS)
-
-``` shell
-# don't track content of these folders
-nandiasgarden/__pycache__/
-nandiasgarden/__init__.py
-env/
-
-# compiled source #
-###################
-*.pyc
-
-# sqlite3 file (We'd be using postgreSQL)
-*.sqlite3
-```
-
-Git add the rests of the files
-
-```
-git add .
-```
-
-Create a github repository and add it to the local configuration. We decided to call it "heroku"
-```
-git remote add heroku https://github.com/Yoimer/nandians-garden.git
-```
-
-Git commit
-```
-git commit -m "initial django configurations based on the local enviroment"
-```
-
-Git Push the commit
-```
-git push -u heroku local
-```
-
-Create a new app. One of our main products is "pizza", so let's create it
-
-```
-django-admin startapp pizza
-```
-
-Add pizza/__init__.py and pizza/migrations/__init__.py to .gitignore
-
-``` shell
-# don't track content of these folders
-nandiasgarden/__pycache__/
-nandiasgarden/__init__.py
-pizza/__init__.py
-pizza/migrations/__init__.py
-env/
-
-# compiled source #
-###################
-*.pyc
-
-# sqlite3 file (We'd be using postgreSQL)
-*.sqlite3
-```
-
-Add home and ordering page to the project. In order to do so, let's add the new pages on the **nandiasgarden\url.py**:
-
-``` python
-from django.contrib import admin
-from django.urls import path
-from pizza import views
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.home, name='home'), #default page
-    path('order', views.order, name='order'),
-]
-```
-
-Since we have just installed our pizza app, we have to add it to the **nandiasgarden/settings.py** INSTALLED_APPS list:
-
-``` python
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'pizza',
-]
-```
-
-Let's make some views that return back this two sites (home and order) on **pizza/views.py**
-
-``` python
-from django.shortcuts import render
-
-def home(request):
-    return render(request, 'pizza/home.html')
-
-def order(request):
-    return render(request, 'pizza/order.html')
-```
-
-Let's add the templatess for both of these views:
-
-Inside of the **pizza** folder let's create **templates** folder and inside of it let's create one called **pizza** and in that folder the **home.html**
-
-```
-pizza/templates/pizza/home.html
-```
-
-```
-pizza/templates/pizza/order.html
-```
-
-Content of home.html
-``` html
-<h1>Nadian's Garden</h1>
-<a href="{% url 'order' %}">Order a pizza</a>
-```
-
-Content of order.html (including csrf_token)
-``` html
-<h1>Order a Pizza</h1>
-
-<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
-    is going to go to the url where you currently are. even if it's what you want, 
-    it's always a best practice to make sure that you specify where the url is
--->
-<form action="{% url 'order' %}" method="post">
-    {% csrf_token %}
-    <label for="topping1">Topping 1: </label>
-    <input id="topping1" type="text" name="topping1">
-    <label for="topping2">Topping 2:</label>
-    <input id="topping2" type="text" name="topping2">
-    <label for="size">Size: </label>
-    <select id="size" name="size">
-        <option value="Small">Small</option>
-        <option value="Medium">Medium</option>
-        <option value="Large">Large</option>
-    </select>
-    <input type="submit" value="Order Pizza">
-</form>
-```
-
-Adds **forms.py** on **root folder** (this removes html schelet on order.html)
-
-``` python
-from django import forms
-
-class PizzaForm(forms.Form):
-    topping1 = forms.CharField(label='Topping 1', max_length=100)
-    topping2 = forms.CharField(label='Topping 2', max_length=100)
-    size = forms.ChoiceField(label='Size',choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
-```
-Content of order.html (calling forms.py)
-
-``` html
-<h1>Order a Pizza</h1>
-
-<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
-    is going to go to the url where you currently are. even if it's what you want, 
-    it's always a best practice to make sure that you specify where the url is
--->
-<form action="{% url 'order' %}" method="post">
-    {% csrf_token %}
-    {{ pizzaform }}
-    <input type="submit" value="Order Pizza">
-</form>
-```
-
-Using submitted data
-
-Updating **order** function on **pizza/views.py**
-
-``` python
-from django.shortcuts import render
-from .forms import PizzaForm
-
-def home(request):
-    return render(request, 'pizza/home.html')
-
-def order(request):
-    if request.method == 'POST':
-        filled_form = PizzaForm(request.POST)
-        if filled_form.is_valid():
-            #filled_form data values belong to labels on forms.py
-            note = 'Thanks for ordering! Your %s %s and %s pizza is on its way' %(filled_form.cleaned_data['size'],
-            filled_form.cleaned_data['topping1'],
-            filled_form.cleaned_data['topping2'],)
-            new_form = PizzaForm()
-            return render(request, 'pizza/order.html', {'pizzaform':new_form, 'note':note})
-    else:
-        form = PizzaForm()
-        return render(request, 'pizza/order.html', {'pizzaform':form})
-```
-
-Renders note on **templates/pizza/order.html** from **pizza/views.py**
-
-``` html
-<h1>Order a Pizza</h1>
-
-<h2>{{ note }}</h2>
-
-<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
-    is going to go to the url where you currently are. even if it's what you want, 
-    it's always a best practice to make sure that you specify where the url is
--->
-<form action="{% url 'order' %}" method="post">
-    {% csrf_token %}
-    {{ pizzaform }}
-    <input type="submit" value="Order Pizza">
-</form>
-```
-
-Adds **Pizza** and **Size** classes in **pizza/models.py**
-
-``` python
-from django.db import models
-
-# Create your models here.
-
-class Size(models.Model):
-    title = models.CharField(max_length=100)
-
-# this will help us show the size in forms and in the adming panel.
-# __str__: works for any class NOT only classes in django
-# and what it does is define what the object should look like
-# when it's printed out to a screen. It applies when it's printed
-# to a terminal or to a HTML.
-def __str__(self):
-    return self.title
-
-class Pizza(models.Model):
-    topping1 = models.CharField(max_length=100)
-    topping2 = models.CharField(max_length=100)
-    # this line creates a connection with to our size class
-    # if one thing is deleted, we're also going to delete the corresponding object that has the relationship
-    size = models.ForeignKey(Size, on_delete=models.CASCADE)
-```
-
-Adds **Pizza** and **Size** in **pizza/admin.py** in order to be in the **Admin** in django
-
-``` python
-from django.contrib import admin
-
-# register your models here.
-
-from .models import Pizza, Size
-
-admin.site.register(Pizza)
-admin.site.register(Size)
-```
-Installs **psycopg2==2.7.4** and  **python-decouple==3.1** for postgresql configuration from the previous activated **virtualenv**
-
-```
-pip3 install psycopg2==2.7.4 python-decouple==3.1
-```
-
-Creates **requirements.txt** adding all the python3 dependecies for the project so far using **pip3 freeze**
-
-```
-pip3 free > requirements.txt
-```
-These are all python3 dependencies so far
-```
-Django==2.2.5
-psycopg2==2.7.4
-python-decouple==3.1
-pytz==2019.2
-sqlparse==0.3.0
-```
-Removes **sqlite3** configuration and adds **postgresql**
-
-``` python
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'nandiansgardendb',
-        'USER': 'nandiansgarden',
-        'PASSWORD': '12345',
-        'HOST': 'localhost',
-        'PORT': '5432',
-     }
-}
-```
-
-Creates **migrations** and execute **migrate** from **prompt** (virtualenv in **root** directory) 
-in order to start configuring **Pizza** and **Sizes** from Admin
+**Check migrations and migrate**
 
 ```
 python manage.py makemigrations
 ```
+
 ```
 python manage.py migrate
 ```
@@ -525,198 +201,24 @@ Creates **superuser** in order to manipulate data from Admin. It asks for user, 
 python manage.py createsuperuser
 ```
 
-Start server again (if not running already) and go on the browser to the admin section. Check if **Pizza** and **Size**
-objects were created successfully.
+**Test django server is running**
 
-```
+``` python
 python manage.py runserver
 ```
 
-```
-http://127.0.0.0:8000/admin
-```
+**Check server on browser**
 
-In order to see the  pure **SQL queries** made on the migration, let's execute this command
+http://127.0.0.1:8000/
 
-```
-python manage.py sqlmigrate app migration
-```
+**Add some data to pizza Size (Small, Medium and Large)**
 
-In our case the app is **pizza** and the migration is **0001**
+![Alt text](./docs/img/admin.jpg?raw=true "admin")
 
-```
-python manage.py sqlmigrate pizza 0001
-```
-The output should look like this
+**Order a pizza**
 
-```
-BEGIN;
---
--- Create model Size
---
-CREATE TABLE "pizza_size" ("id" serial NOT NULL PRIMARY KEY, "title" varchar(100) NOT NULL);
---
--- Create model Pizza
---
-CREATE TABLE "pizza_pizza" ("id" serial NOT NULL PRIMARY KEY, "topping1" varchar(100) NOT NULL, "topping2" varchar(100) NOT NULL, "size_id" integer NOT NULL);
-ALTER TABLE "pizza_pizza" ADD CONSTRAINT "pizza_pizza_size_id_44f838e1_fk_pizza_size_id" FOREIGN KEY ("size_id") REFERENCES "pizza_size" ("id") DEFERRABLE INITIALLY DEFERRED;
-CREATE INDEX "pizza_pizza_size_id_44f838e1" ON "pizza_pizza" ("size_id");
-COMMIT;
-```
+![Alt text](./docs/img/order-a-pizza.jpg?raw=true "order a pizza")
 
-Adding model forms
+**Checking Ordered Pizza**
 
-Let's update **pizza/forms.py** file
-
-``` python
-from django import forms
-from .models import Pizza
-
-#Let's comment out the actual PizzaForm class and lets's create a new one using models
-
-# class PizzaForm(forms.Form):
-#     topping1 = forms.CharField(label='Topping 1', max_length=100)
-#     topping2 = forms.CharField(label='Topping 2', max_length=100)
-#     size = forms.ChoiceField(label='Size',choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
-
-class PizzaForm(forms.ModelForm):
-    class Meta:
-        model = Pizza
-        fields = ['topping1', 'topping2', 'size']
-        labels = {'topping1': 'Topping 1', 'topping2': 'Topping 2'}
-```
-**Widgets**
-
-This is what a widget would look like using forms on **pizza/forms.py** file
-
-``` python
-from django import forms
-from .models import Pizza
-
-class PizzaForm(forms.Form):
-
-    ######widget implementations
-    topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.Textarea) # for textarea
-    topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.PasswordInput) # for password
-    toppings = forms.MultipleChoiceField(choices=[('pep', 'Pepperoni'), ('cheese', 'Cheese'), ('olives', 'Olives')], widget=forms.CheckboxSelectMultiple) # for checkboxes
-```
-
-**Advanced Widgets**
-
-This is what a widget would look like using models on **pizza/forms.py** file
-
-``` python
-from django import forms
-from .models import Pizza, Size
-
-# class PizzaForm(forms.Form):
-
-    # topping1 = forms.CharField(label='Topping 1', max_length=100)
-    # topping2 = forms.CharField(label='Topping 2', max_length=100)
-    # size = forms.ChoiceField(label='Size',choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
-
-class PizzaForm(forms.ModelForm):
-
-    size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.RadioSelect)
-
-    class Meta:
-        model = Pizza
-        fields = ['topping1', 'topping2', 'size']
-        labels = {'topping1': 'Topping 1', 'topping2': 'Topping 2'}
-        # widgets = {'topping1': forms.Textarea}
-        # widgets = {'size':forms.CheckboxSelectMultiple}
-```
-
-**Formsets - Multiple forms on a page**
-
-Added pizzas path view in **nandiasgarden/urls.py**
-
-``` python
-
-from django.contrib import admin
-from django.urls import path
-from pizza import views
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.home, name='home'), #default page
-    path('order', views.order, name='order'),
-    path('pizzas', views.pizzas, name='pizzas'),
-```
-Creating  **MultiplePizzaForm** class in **pizza/form.py**
-
-``` python
-from django import forms
-from .models import Pizza, Size
-
-# class PizzaForm(forms.Form):
-
-    # topping1 = forms.CharField(label='Topping 1', max_length=100)
-    # topping2 = forms.CharField(label='Topping 2', max_length=100)
-    # size = forms.ChoiceField(label='Size',choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
-
-class PizzaForm(forms.ModelForm):
-
-    size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.RadioSelect)
-
-    class Meta:
-        model = Pizza
-        fields = ['topping1', 'topping2', 'size']
-        labels = {'topping1': 'Topping 1', 'topping2': 'Topping 2'}
-        # widgets = {'topping1': forms.Textarea}
-        # widgets = {'size':forms.CheckboxSelectMultiple}
-
-    class MultiplePizzaForm(forms.Form):
-        number = forms.IntegerField(min_value=2, max_length=6)
-```
-Adding "Want more Pizza?" form in **pizza/templates/pizza/order.html**
-
-``` html
-<h1>Order a Pizza</h1>
-
-<h2>{{ note }}</h2>
-
-<!-- the action of a form is where you want to send the form. by default if you don't provide anything in the action
-    is going to go to the url where you currently are. even if it's what you want, 
-    it's always a best practice to make sure that you specify where the url is
--->
-<form action="{% url 'order' %}" method="post">
-    {% csrf_token %}
-    {{ pizzaform }}
-    <input type="submit" value="Order Pizza">
-</form>
-
-<br><br>
-
-Want more than one pizza?
-
-<form action="{% url 'pizzas' %}" method="get">
-    {{multiple_form}}
-    <input type="submit" name="Get Pizzas">
-</form>
-```
-
-Adding MultiplePizzaForm on **pizza/view.py**
-
-``` python
-from django.shortcuts import render
-from .forms import PizzaForm, MultiplePizzaForm
-
-def home(request):
-    return render(request, 'pizza/home.html')
-
-def order(request):
-    multiple_form = MultiplePizzaForm()
-    if request.method == 'POST':
-        filled_form = PizzaForm(request.POST)
-        if filled_form.is_valid():
-            #filled_form data values belong to labels on forms.py
-            note = 'Thanks for ordering! Your %s %s and %s pizza is on its way' %(filled_form.cleaned_data['size'],
-            filled_form.cleaned_data['topping1'],
-            filled_form.cleaned_data['topping2'],)
-            new_form = PizzaForm()
-            return render(request, 'pizza/order.html', {'pizzaform':new_form, 'note':note, 'multiple_form': multiple_form})
-    else:
-        form = PizzaForm()
-        return render(request, 'pizza/order.html', {'pizzaform':form, 'multiple_form':multiple_form})
-```
+![Alt text](./docs/img/ordered-pizza.jpg?raw=true "ordered pizza")
