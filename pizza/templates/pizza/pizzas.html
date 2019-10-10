@@ -4,7 +4,7 @@
     <h1>Order Pizzas</h1>
     <h2>{{ note }}</h2>
 
-    <form action="{% url 'pizzas' %}" method="post">
+    <form id="multiplepizzaform" action="{% url 'pizzas' %}" method="post">
         {% csrf_token %}
         {{ formset.management_form }}
 
