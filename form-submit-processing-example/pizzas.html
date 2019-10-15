@@ -1,0 +1,88 @@
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>Nandia's Garden</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #238a44">
+            <div class="container">
+                <a class="navbar-brand" href="/">Nandia's Garden</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/order">Order Pizza</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <h1>Order Pizzas</h1>
+            <h2></h2>
+            <form id="multiplepizzaform" action="/pizzas" method="post">
+                <input type="hidden" name="csrfmiddlewaretoken" value="Ul6tuwnwMIGXzGd8MYy68osZ4xaSnttiTDpwsdeQiKZckjNPrbQDvy0h29F1Rd3y">
+                <input type="hidden" name="form-TOTAL_FORMS" value="5" id="id_form-TOTAL_FORMS"><input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"><input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS"><input type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS">
+                <label for="id_form-0-topping1">Topping 1:</label><input type="text" name="form-0-topping1" maxlength="100" id="id_form-0-topping1">
+                <label for="id_form-0-topping2">Topping 2:</label><input type="text" name="form-0-topping2" maxlength="100" id="id_form-0-topping2">
+                <label for="id_form-0-size">Size:</label>
+                <select name="form-0-size" id="id_form-0-size">
+                    <option value="" selected="">---------</option>
+                    <option value="1">Small</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Large</option>
+                </select>
+                <br><br>
+                <label for="id_form-1-topping1">Topping 1:</label><input type="text" name="form-1-topping1" maxlength="100" id="id_form-1-topping1">
+                <label for="id_form-1-topping2">Topping 2:</label><input type="text" name="form-1-topping2" maxlength="100" id="id_form-1-topping2">
+                <label for="id_form-1-size">Size:</label>
+                <select name="form-1-size" id="id_form-1-size">
+                    <option value="" selected="">---------</option>
+                    <option value="1">Small</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Large</option>
+                </select>
+                <br><br>
+                <label for="id_form-2-topping1">Topping 1:</label><input type="text" name="form-2-topping1" maxlength="100" id="id_form-2-topping1">
+                <label for="id_form-2-topping2">Topping 2:</label><input type="text" name="form-2-topping2" maxlength="100" id="id_form-2-topping2">
+                <label for="id_form-2-size">Size:</label>
+                <select name="form-2-size" id="id_form-2-size">
+                    <option value="" selected="">---------</option>
+                    <option value="1">Small</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Large</option>
+                </select>
+                <br><br>
+                <label for="id_form-3-topping1">Topping 1:</label><input type="text" name="form-3-topping1" maxlength="100" id="id_form-3-topping1">
+                <label for="id_form-3-topping2">Topping 2:</label><input type="text" name="form-3-topping2" maxlength="100" id="id_form-3-topping2">
+                <label for="id_form-3-size">Size:</label>
+                <select name="form-3-size" id="id_form-3-size">
+                    <option value="" selected="">---------</option>
+                    <option value="1">Small</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Large</option>
+                </select>
+                <br><br>
+                <label for="id_form-4-topping1">Topping 1:</label><input type="text" name="form-4-topping1" maxlength="100" id="id_form-4-topping1">
+                <label for="id_form-4-topping2">Topping 2:</label><input type="text" name="form-4-topping2" maxlength="100" id="id_form-4-topping2">
+                <label for="id_form-4-size">Size:</label>
+                <select name="form-4-size" id="id_form-4-size">
+                    <option value="" selected="">---------</option>
+                    <option value="1">Small</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Large</option>
+                </select>
+                <br><br>
+                <input type="submit" value="Order Pizzas">
+            </form>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
