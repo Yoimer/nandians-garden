@@ -1,5 +1,6 @@
 {% extends 'pizza/base.html' %}
 {% block 'body' %}
+{% load static %}
 <div class="container">
     <h1>Order Pizzas</h1>
     <h2>{{ note }}</h2>
@@ -14,5 +15,6 @@
         {% endfor %}
         <input type="submit" value="Order Pizzas">
     </form>
+    <script src="{% static 'scripts/apps.js' %}"></script>
 </div>
 {% endblock%}
