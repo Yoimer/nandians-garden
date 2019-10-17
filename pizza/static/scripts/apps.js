@@ -31,6 +31,9 @@ var EmptyFieldController = (function() {
 
         if(each_pizza_array.every(isEmpty)) {
             alert("Fields are Empty. Please, fill them all");
+            // this line forces to fill first field with a dot.
+            // it bypasses filled_formset.is_valid() on pizza function in views.py
+            document.getElementById("id_form-0-topping1").value = ".";
         }
     }
 
