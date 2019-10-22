@@ -31,12 +31,27 @@ def pizzas(request):
     number_of_pizzas = 2
     filled_multiple_pizza_form = MultiplePizzaForm(request.GET)
     if filled_multiple_pizza_form.is_valid():
-
         # this line valids if number of pizzas are between 2 and 6
         number_of_pizzas = filled_multiple_pizza_form.cleaned_data['number']
+
     PizzaFormSet = formset_factory(PizzaForm, extra=number_of_pizzas)
     formset = PizzaFormSet()
+
     if request.method == "POST":
+        # section of code that saves field values in db
+        post_form_values = {}
+        post_form_values = request.POST
+        number_of_forms = int(post_form_values['form-TOTAL_FORMS'])
+
+        to_db = {}
+        for i in range(0, number_of_forms):
+            to_db['size'] = post_form_values['form-' + str(i) + '-' + 'size']
+            to_db['topping1'] = post_form_values['form-' + str(i) + '-' + 'topping1']
+            to_db['topping2'] = post_form_values['form-' + str(i) + '-' + 'topping2']
+            filled_form = PizzaForm(to_db)
+            if filled_form.is_valid():
+                filled_form.save()
+
         filled_formset = PizzaFormSet(request.POST)
         if(filled_formset.is_valid()):
             for form in filled_formset:
