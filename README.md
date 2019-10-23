@@ -188,7 +188,7 @@ pip3 install -r requirements.txt
 **Check migrations and migrate**
 
 ```
-python manage.py makemigrations
+python manage.py makemigrations pizza
 ```
 
 ```
