@@ -4,6 +4,9 @@
 <div class="container">
     <h1>Order Pizzas</h1>
     <h2>{{ note }}</h2>
+    {% if created_pizza_pk %}
+    <a href="{% url 'edit_order' created_pizza_pk %}">Edit Your Order </a>
+    {% endif %}
 
     <form id="multiplepizzaform" action="" method="post">
         {% csrf_token %}

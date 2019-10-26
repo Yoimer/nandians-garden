@@ -51,6 +51,8 @@ def pizzas(request):
             filled_form = PizzaForm(to_db)
             if filled_form.is_valid():
                 filled_form.save()
+                created_pizza = filled_form.save()
+                created_pizza_pk = created_pizza.id
 
         filled_formset = PizzaFormSet(request.POST)
         if(filled_formset.is_valid()):
@@ -59,7 +61,7 @@ def pizzas(request):
             note = 'Pizzas have been ordered!'
         else:
             note = 'Order was not created, please try again'
-        return render(request, 'pizza/pizzas.html', {'note':note, 'formset':formset})
+        return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset})
     else:
         return render(request, 'pizza/pizzas.html', {'formset':formset})
 
