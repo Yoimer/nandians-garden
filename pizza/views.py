@@ -44,6 +44,7 @@ def pizzas(request):
         number_of_forms = int(post_form_values['form-TOTAL_FORMS'])
 
         to_db = {}
+        created_pizza_pk = " "
         for i in range(0, number_of_forms):
             to_db['size'] = post_form_values['form-' + str(i) + '-' + 'size']
             to_db['topping1'] = post_form_values['form-' + str(i) + '-' + 'topping1']
@@ -61,7 +62,14 @@ def pizzas(request):
             note = 'Pizzas have been ordered!'
         else:
             note = 'Order was not created, please try again'
-        return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset})
+
+        # if submitting with all fields being empty, 
+        # created_pizza_pk remains empty because there is no iteraction with db.
+        # then, it returns note and formset
+        if(created_pizza_pk == " "):
+            return render(request, 'pizza/pizzas.html', {'note':note, 'formset':formset})
+        else:
+            return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset})
     else:
         return render(request, 'pizza/pizzas.html', {'formset':formset})
 
