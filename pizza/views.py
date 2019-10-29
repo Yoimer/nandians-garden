@@ -1,7 +1,10 @@
-from django.shortcuts import render
 from .forms import PizzaForm, MultiplePizzaForm
 from django.forms import formset_factory
 from .models import Pizza
+
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
 def home(request):
     return render(request, 'pizza/home.html')
@@ -31,7 +34,7 @@ def pizzas(request):
     number_of_pizzas = 2
     filled_multiple_pizza_form = MultiplePizzaForm(request.GET)
     if filled_multiple_pizza_form.is_valid():
-        # this line valids if number of pizzas are between 2 and 6
+        # this line valids if pker of pizzas are between 2 and 6
         number_of_pizzas = filled_multiple_pizza_form.cleaned_data['number']
 
     PizzaFormSet = formset_factory(PizzaForm, extra=number_of_pizzas)
@@ -63,19 +66,20 @@ def pizzas(request):
         else:
             note = 'Order was not created, please try again'
 
-        # if submitting with all fields being empty, 
+        # if submitting with all fields being empty,
         # created_pizza_pk remains empty because there is no iteraction with db.
         # then, it returns note and formset
         if(created_pizza_pk == " "):
             return render(request, 'pizza/pizzas.html', {'note':note, 'formset':formset})
         else:
-            return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset})
+            return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset, 'nop':number_of_pizzas})
     else:
         return render(request, 'pizza/pizzas.html', {'formset':formset})
 
 def edit_order(request, pk):
     pizza = Pizza.objects.get(pk=pk)
     form = PizzaForm(instance=pizza)
+
     if request.method == 'POST':
         filled_form = PizzaForm(request.POST,instance=pizza)
         if filled_form.is_valid():
@@ -84,3 +88,11 @@ def edit_order(request, pk):
             note = 'Order has been updated.'
             return render(request, 'pizza/edit_order.html', {'pizzaform':form, 'note':note, 'pizza':pizza})
     return render(request, 'pizza/edit_order.html', {'pizzaform':form,'pizza':pizza})
+
+def edit_multi_order(request, pk, nop):
+    pizza = Pizza.objects.get(pk=pk)
+    form = PizzaForm(instance=pizza)
+    note = 'editing_multi_order.'
+    PizzaFormSet = formset_factory(PizzaForm, extra=5)
+    formset = PizzaFormSet()
+    return render(request, 'pizza/edit_multi_order.html', {'note':note,'pizzaform':form, 'pizza':pizza, 'formset':formset, 'nop':nop})

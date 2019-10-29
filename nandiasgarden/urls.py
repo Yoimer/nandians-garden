@@ -23,4 +23,5 @@ urlpatterns = [
     path('order', views.order, name='order'),
     path('pizzas', views.pizzas, name='pizzas'),
     path('order/<int:pk>', views.edit_order, name='edit_order'),
+    path('multiorder/<int:pk>/<int:nop>', views.edit_multi_order, name='edit_multi_order'), #nop stands for number of pizzas
 ]
