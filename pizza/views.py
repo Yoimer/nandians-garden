@@ -72,7 +72,7 @@ def pizzas(request):
         if(created_pizza_pk == " "):
             return render(request, 'pizza/pizzas.html', {'note':note, 'formset':formset})
         else:
-            return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset, 'nop': number_of_forms})
+            return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset, 'nop': number_of_forms-1})
     else:
         return render(request, 'pizza/pizzas.html', {'formset':formset})
 
@@ -93,6 +93,18 @@ def edit_multi_order(request, pk, nop):
     pizza = Pizza.objects.get(pk=pk)
     form = PizzaForm(instance=pizza)
     note = 'editing_multi_order.'
+
     PizzaFormSet = formset_factory(PizzaForm, extra=nop)
     formset = PizzaFormSet()
+
+    # this harcodes fields when editing multiorder for pizzas
+    # this is just for testing, these values are supposed to come from db to be updated
+    formset.forms[0].initial.update({'size' : 3})
+    formset.forms[0].initial.update({'topping1' : 'ZZ'})
+    formset.forms[0].initial.update({'topping2' : 'PP'})
+
+    formset.forms[1].initial.update({'size' : 1})
+    formset.forms[1].initial.update({'topping1' : 'XX'})
+    formset.forms[1].initial.update({'topping2' : 'VVBB'})
+
     return render(request, 'pizza/edit_multi_order.html', {'note':note,'pizzaform':form, 'pizza':pizza, 'formset':formset, 'nop':nop})
