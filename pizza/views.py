@@ -72,7 +72,7 @@ def pizzas(request):
         if(created_pizza_pk == " "):
             return render(request, 'pizza/pizzas.html', {'note':note, 'formset':formset})
         else:
-            return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset, 'nop':number_of_pizzas})
+            return render(request, 'pizza/pizzas.html', {'created_pizza_pk':created_pizza_pk, 'note':note, 'formset':formset, 'nop': number_of_forms})
     else:
         return render(request, 'pizza/pizzas.html', {'formset':formset})
 
@@ -93,6 +93,6 @@ def edit_multi_order(request, pk, nop):
     pizza = Pizza.objects.get(pk=pk)
     form = PizzaForm(instance=pizza)
     note = 'editing_multi_order.'
-    PizzaFormSet = formset_factory(PizzaForm, extra=5)
+    PizzaFormSet = formset_factory(PizzaForm, extra=nop)
     formset = PizzaFormSet()
     return render(request, 'pizza/edit_multi_order.html', {'note':note,'pizzaform':form, 'pizza':pizza, 'formset':formset, 'nop':nop})

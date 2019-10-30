@@ -5,7 +5,7 @@
     <h1>Order Pizzas</h1>
     <h2>{{ note }}</h2>
     {% if nop %}
-    <a href="{% url 'edit_multi_order' created_pizza_pk nop %}">Edit Your Pizza Order kkk </a>
+    <a href="{% url 'edit_multi_order' created_pizza_pk nop %}">Edit Your Multi Pizzas Order  </a>
     {% endif %}
 
     <form id="multiplepizzaform" action="{% url 'pizzas' %}" method="post">
