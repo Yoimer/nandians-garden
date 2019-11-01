@@ -90,21 +90,22 @@ def edit_order(request, pk):
     return render(request, 'pizza/edit_order.html', {'pizzaform':form,'pizza':pizza})
 
 def edit_multi_order(request, pk, nop):
+
     pizza = Pizza.objects.get(pk=pk)
     form = PizzaForm(instance=pizza)
     note = 'editing_multi_order.'
 
+    # creates as many forms as number of pizzas has (nop stands for number of pizzas)
     PizzaFormSet = formset_factory(PizzaForm, extra=nop)
     formset = PizzaFormSet()
 
-    # this harcodes fields when editing multiorder for pizzas
-    # this is just for testing, these values are supposed to come from db to be updated
-    formset.forms[0].initial.update({'size' : 3})
-    formset.forms[0].initial.update({'topping1' : 'ZZ'})
-    formset.forms[0].initial.update({'topping2' : 'PP'})
-
-    formset.forms[1].initial.update({'size' : 1})
-    formset.forms[1].initial.update({'topping1' : 'XX'})
-    formset.forms[1].initial.update({'topping2' : 'VVBB'})
+    # checks values saved on db and retrieve them on forms
+    j = 0
+    for i in range((pk-nop), pk):
+        temp_from_db = Pizza.objects.get(pk=i)
+        formset.forms[j].initial.update({'size': temp_from_db.size})
+        formset.forms[j].initial.update({'topping1': temp_from_db.topping1})
+        formset.forms[j].initial.update({'topping2': temp_from_db.topping2})
+        j = j + 1
 
     return render(request, 'pizza/edit_multi_order.html', {'note':note,'pizzaform':form, 'pizza':pizza, 'formset':formset, 'nop':nop})
