@@ -92,17 +92,15 @@ def edit_order(request, pk):
 def edit_multi_order(request, pk, nop):
 
     pizza = Pizza.objects.get(pk=pk)
-    note = 'editing_multi_order.'
+    note = 'Please edit your multi order.'
 
     # creates as many forms as number of pizzas has (nop stands for number of pizzas)
     PizzaFormSet = formset_factory(PizzaForm, extra=nop)
     formset = PizzaFormSet()
 
-    # checks values saved on db and retrieve them on forms
     j = 0
-
-    # updates values from fields and saves them on db
     for i in range((pk - nop) + 1, (pk + 1)):
+        # checks values saved on db and retrieve them on forms
         pizza_from_db = Pizza.objects.get(pk=i)
         formset.forms[j].initial.update({'size': pizza_from_db.size})
         formset.forms[j].initial.update({'topping1': pizza_from_db.topping1})
@@ -112,6 +110,7 @@ def edit_multi_order(request, pk, nop):
         to_db = {}
         post_form_values = request.POST
 
+        # updates values from fields and saves them on db
         if request.method == 'POST':
             to_db['size'] = post_form_values['form-' + str(j) + '-' + 'size']
             to_db['topping1'] = post_form_values['form-' + str(j) + '-' + 'topping1']
@@ -119,7 +118,13 @@ def edit_multi_order(request, pk, nop):
             filled_form = PizzaForm(to_db, instance=pizza_from_db)
             if filled_form.is_valid():
                 filled_form.save()
-
+                note = 'Orders has been updated.'
+            # return render(request, 'pizza/edit_multi_order.html', {'formset':formset, 'nop':nop, 'note':note, 'pizza':pizza})
         j = j + 1
 
-    return render(request, 'pizza/edit_multi_order.html', {'note':note,'pizza':pizza, 'formset':formset, 'nop':nop})
+    # this checks if values from db has been updated already
+    # if len is greater than zero, this means that values from db were updated
+    if len(to_db.keys()) == 0:
+        return render(request, 'pizza/edit_multi_order.html', {'formset':formset, 'nop':nop, 'note':note, 'pizza':pizza})
+
+    return render(request, 'pizza/edit_multi_order.html', {'note':note,'pizza':pizza, 'nop':nop})

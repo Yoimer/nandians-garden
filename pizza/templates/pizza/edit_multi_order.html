@@ -15,7 +15,11 @@
             {{ form }}
             <br><br>
         {% endfor %}
-        <input type="submit" value="Edit Multiple Pizzas">
+
+        {% if note != 'Orders has been updated.' %}
+            <input type="submit" value="Edit Multiple Pizzas">
+        {% endif %}
+
     </form>
 
 </div>
