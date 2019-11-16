@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from pizza import views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'), #default page
@@ -24,4 +27,4 @@ urlpatterns = [
     path('pizzas', views.pizzas, name='pizzas'),
     path('order/<int:pk>', views.edit_order, name='edit_order'),
     path('multiorder/<int:pk>/<int:nop>', views.edit_multi_order, name='edit_multi_order'), #nop stands for number of pizzas
-]
+]   +static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
