@@ -212,7 +212,7 @@ heroku addons:create heroku-postgresql:hobby-dev --app appname (in our case nand
 heroku addons:create heroku-postgresql:hobby-dev --app nandiansgarden
 ```
 
-Push code to heroku
+**Push code to heroku**
 
 ```
 git push heroku master
@@ -220,3 +220,37 @@ git push heroku master
 
 If deployment is successful, console should show http://appname.herokuapp.com **(https://nandiansgarden.herokuapp.com)** deployed to heroku
 ![Alt text](./docs/img/heroku-deployment.jpg?raw=true "heroku deployment")
+
+**Migrate in heroku**
+
+```
+heroku run python manage.py migrate
+```
+Console should apply all the migration sessions a shown above
+![Alt text](./docs/img/heroku-migrate.jpg?raw=true "heroku migrate")
+
+
+**Activate pizza app on heroku**
+
+The next steps were needed in order to activate the **pizza** app saved on **nandiasgarden/settings.py**
+on heroku.
+
+```
+heroku run bash
+```
+
+```
+python manage.py  makemigrations
+```
+
+```
+python manage.py  makemigrations pizza
+```
+
+Once again
+
+```
+python manage.py migrate
+```
+
+![Alt text](./docs/img/heroku-makemigrations-pizza.jpg?raw=true "heroku make migration pizza")
