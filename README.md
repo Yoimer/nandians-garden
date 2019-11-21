@@ -8,15 +8,13 @@ This project is about to explain how to deploy the django forms project from lyn
 
 * Python 3 ``` Python 3.6.8 ``` from https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe (using another python version might not work as expected).
 
-* PostgreSQL ``` 11.05 (Graphical User Interface) ``` from https://get.enterprisedb.com/postgresql/postgresql-11.5-1-windows-x64.exe
-
 * Heroku CLI ``` heroku/7.35.0 win32-x64 node-v12.13.0 ``` or above from https://cli-assets.heroku.com/heroku-x64.exe .
 
 ### Configuration for Heroku deployment 
-When clonning this branch, all of these changes will be made already. We are just explaning what heroku
+When cloning this branch, all of these changes will be made already. We are just explaning what heroku
 requires to work from a django project
 
-We need to modify the **settings.py** file inside the **nandiasgarden** folder
+We need to modify the **settings.py** file inside the **nandiansgarden** folder
 
 Heroku requires this adaption in order to work as expected.
 
@@ -75,7 +73,7 @@ DATABASES = {
 ```
 Let's add the Django **static** files configuration.
 
-We need to create a folder called **static** inside the **root project (nandiasgarden)** folder
+We need to create a folder called **static** inside the **root project (nandiansgarden)** folder
 
 ``` python
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -88,13 +86,13 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ```
-Generate **Procfile** in root directory. It has to have the project name (in our case is nandiasgarden)
+Generate **Procfile** in root directory. It has to have the project name (in our case is nandiansgarden)
 
 ```
-web: gunicorn nandiasgarden.wsgi --log-file -
+web: gunicorn nandiansgarden.wsgi --log-file -
 ```
 
-Add from **django.conf import settings** and **django.conf.urls.static import static** on nandiasgarden/urls.py and **+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)** at the end of the **urlpatterns** list
+Add from **django.conf import settings** and **django.conf.urls.static import static** on nandiansgarden/urls.py and **+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)** at the end of the **urlpatterns** list
 
 
 ``` python
@@ -111,3 +109,114 @@ urlpatterns = [
     path('multiorder/<int:pk>/<int:nop>', views.edit_multi_order, name='edit_multi_order'), #nop stands for number of pizzas
 ]   +static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 ```
+
+### Installation and Cloning
+
+
+* Cloning master branch in your Windows computer
+
+```
+git clone https://github.com/Yoimer/nandians-garden.git --branch master --single-branch
+```
+
+* Python 3.6.8
+
+**Install the python-3.6.8-amd64.exe file using the default instalation and add Python 3.6 to PATH**
+
+```
+Default path
+C:\Users\User\AppData\Local\Programs\Python\Python36
+```
+
+```
+Add Python 3.6 to PATH
+```
+
+**Verify that python is installed in the global enviroment variables by typing on cmd**
+
+```
+python --version
+```
+
+**Install pip version 9.0.3 for this project**
+
+```
+pip install pip==9.0.3
+```
+
+**Install the latest virtualenv**
+
+```
+pip install virtualenv
+```
+
+**Move to nandians-garden folder**
+
+```
+cd nandians-garden
+```
+
+**Create virtual enviroment folder**
+
+```
+python -m venv env
+```
+
+**cd to env\Scripts folder and activate the virtual enviroment**
+
+```
+activate.bat (if using cmd)
+```
+
+```
+Activate.ps1 (if using PowerShell)
+```
+
+Move back to nandians-garden folder
+
+**Install all the dependencies from requirements.txt using pip3**
+
+```
+pip3 install -r requirements.txt
+```
+
+* Heroku Command Line Interface (CLI)
+
+Download and install the **heroku cli** depending on your **OS**
+
+https://devcenter.heroku.com/articles/heroku-cli
+
+**Heroku is installed in the **global path** by default in Windows. Inside of nandians-garden folder, login with your account from **cmd** by typing:**
+
+```
+heroku login
+```
+
+**Create an app including its name (in our case it is nandiansgarden, yours has to be different)**
+
+```
+heroku create -a nandiansgarden
+```
+
+**Add heroku git remote repository**
+
+```
+heroku git:remote -a nandiansgarden
+```
+
+**Create postgresql db in heroku**
+
+heroku addons:create heroku-postgresql:hobby-dev --app appname (in our case nandiansgarden, yours has to be different)
+
+```
+heroku addons:create heroku-postgresql:hobby-dev --app nandiansgarden
+```
+
+Push code to heroku
+
+```
+git push heroku master
+```
+
+If deployment is successful, console should show http://appname.herokuapp.com **(https://nandiansgarden.herokuapp.com)** deployed to heroku
+![Alt text](./docs/img/heroku-deployment.jpg?raw=true "heroku deployment")
