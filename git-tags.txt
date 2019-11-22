@@ -1,0 +1,39 @@
+# create annotaded tag
+git tag -a v1.1 -m "version 1.0" dd5c49428a0
+
+# list tags
+git tag --list
+
+# list tags beginning with "v2"
+git tag -l "v2*"
+
+# list tags with annotations
+git tag -l -n
+
+# show with tags (like SHAs)
+git show v1.1
+
+git diff v1.0..v1.1
+
+# delete a tag
+git tag --delete v1.1
+git tag -d v1.1
+
+# push a tag to a remote server
+git push origin v1.1
+
+# push all tags to a remote server
+git push origin --tags
+
+# fetch commits and tags
+git fetch
+
+# fetch only tags (with necessary commits)
+git fetch --tags
+
+# delete remote tags like remote branches
+git push origin :v1.1
+git push --delete origin v1.1
+git push -d origin v1.1
+
+
