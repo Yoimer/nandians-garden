@@ -254,3 +254,38 @@ python manage.py migrate
 ```
 
 ![Alt text](./docs/img/heroku-makemigrations-pizza.jpg?raw=true "heroku make migration pizza")
+
+**Create django super user on heroku**
+
+We first need exit from the heroku bash enviroment
+
+```
+exit
+```
+
+```
+heroku run python manage.py createsuperuser
+```
+![Alt text](./docs/img/heroku-manage-createsuperuser.jpg?raw=true "heroku manage createsuperuser")
+
+Now, it is needed to configure the pizza sizes in order to order pizzas.
+
+Get on https://nandiansgarden.herokuapp.com/admin/ and login with the password you previously set it
+
+![Alt text](./docs/img/heroku-django-admin.jpg?raw=true "heroku django admin")
+
+* Add pizza sizes
+
+![Alt text](./docs/img/heroku-django-pizza-size.jpg?raw=true "heroku django pizza size")
+
+* Order a Pizza
+
+![Alt text](./docs/img/heroku-django-order.jpg?raw=true "heroku django order")
+
+* Edit Pizza Order
+
+![Alt text](./docs/img/heroku-django-edit-your-order.jpg?raw=true "heroku django edit your order")
+
+* Testing more than one pizza
+
+![Alt text](./docs/img/heroku-django-testing-all-empty-fields.jpg?raw=true "heroku django-testing all empty fields")
