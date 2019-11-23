@@ -73,8 +73,6 @@ DATABASES = {
 ```
 Let's add the Django **static** files configuration.
 
-We need to create a folder called **static** inside the **root project (nandiansgarden)** folder
-
 ``` python
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
